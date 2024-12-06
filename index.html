@@ -9,7 +9,7 @@
         text-stroke-color: black;
       }
       img {
-        width: 100%
+        width: 85%
       }
     </style>
   </head>
@@ -22,8 +22,69 @@
 
     <!-- small tree -->
     <img src="https://github.com/treeTimer/treeTimer.github.io/blob/main/small.png?raw=true">
-   
+   <hr>
+
+
+   <button id="-" onclick="setTime(-30)">-30s</button>
+   <button id="time"><a id="setTime">5</a>m</button>
+   <button id="+" onclick="setTime(30)">+30s</button>
+   <br> <br> <br>
+   <button id="start" onclick="startTimer()">Start</button>
   </center>
 </body>
 </html>
 <!-- Telegram LINK: https://t.me/treetimer -->
+ <!-- Telegram LINK: https://t.me/treetimer -->
+  <!-- Telegram LINK: https://t.me/treetimer -->
+   <!-- Telegram LINK: https://t.me/treetimer -->
+<script>
+    var Time = 5;
+    var mainTime = 5*60 //min * sec (in seconds)
+    let settime = document.getElementById('setTime');
+    var startButt = document.getElementById('start');
+
+    
+
+    function setTime(n) {
+        mainTime=mainTime+n;
+        settime.innerHTML = mainTime/60;
+        console.log(mainTime);
+    }
+
+    function checkTime() {
+        var date = new Date();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        //console.log(hours, minutes)
+        const savedUser = JSON.parse(localStorage.getItem('timer'))
+        //console.log(savedUser)
+        //return savedUser;
+        if (savedUser.minutes + savedUser.doMinutes >= minutes) {
+            return "not ready!"
+        }
+        else {
+            settime.innerHTML = 'READY!';
+            return "ready!"
+        }
+    }
+    console.log(checkTime());
+    console.log(checkTime().minutes);
+
+
+    function startTimer() {
+        var date = new Date();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        console.log(hours, minutes)
+        var SAVETIME = {"hours": hours, "minutes": minutes, "doMinutes": mainTime/60}
+        console.log(SAVETIME)
+        localStorage.setItem('timer', JSON.stringify(SAVETIME));
+
+        settime.innerHTML = "Timer ready! Now get out! "
+        startButt.disabled = true;
+
+        const savedUser = JSON.parse(localStorage.getItem('timer'))
+        console.log(savedUser)
+    }
+
+</script>
