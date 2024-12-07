@@ -6,85 +6,194 @@
       html {
         background-color: cadetblue;
         color: white;
-        text-stroke-color: black;
       }
       img {
-        width: 85%
+        width: 75%
+      }
+      button {
+        width: 12%;
+        height: 50px;
+        border: 1px solid black;
+        border-radius: 20px;
       }
     </style>
   </head>
 <body>
   <center>
-    <div id="1">treeTimer alive</div><hr>
+    <div id="1">
+      <a id="buffhours">0</a><a id="hours"></a> :
+      <a id="buffminutes">0</a><a id="minutes"></a> :
+      <a id="buffsec">0</a>
+      <a id="seconds">  
+      </a>
+    </div><hr>
   </center>
   <center>
     <div id="2"></div>
 
     <!-- small tree -->
-    <img src="https://github.com/treeTimer/treeTimer.github.io/blob/main/small.png?raw=true">
+    <img src="https://github.com/treeTimer/treeTimer.github.io/blob/main/maintree.png?raw=true">
    <hr>
-
-
-   <button id="-" onclick="setTime(-30)">-30s</button>
-   <button id="time"><a id="setTime">5</a>m</button>
-   <button id="+" onclick="setTime(30)">+30s</button>
-   <br> <br> <br>
-   <button id="start" onclick="startTimer()">Start</button>
+   <button id="mintime" onclick="setTime(-1)">-1m</button>
+   <button id="timeset">
+     <a id="stuff">
+       <a id="timesetted">1</a>m 
+     </a>
+   </button>
+   <button id="addtime" onclick="setTime(1)">+1m</button> <br> <br> <br>
+   <button id="start" onclick="startTimer(1)">Start</button>
   </center>
 </body>
 </html>
+
 <!-- Telegram LINK: https://t.me/treetimer -->
  <!-- Telegram LINK: https://t.me/treetimer -->
   <!-- Telegram LINK: https://t.me/treetimer -->
    <!-- Telegram LINK: https://t.me/treetimer -->
+
 <script>
-    var Time = 5;
-    var mainTime = 5*60 //min * sec (in seconds)
-    let settime = document.getElementById('setTime');
-    var startButt = document.getElementById('start');
+//user data from localStorage
+var savedUser = JSON.parse(localStorage.getItem('user'))
+console.log(savedUser)
+//text
+let hoursScreen = document.getElementById("hours"),
+  minutesScreen = document.getElementById('minutes'),
+  secondsScreen = document.getElementById('seconds'),
+  buffsecScreen = document.getElementById('buffsec'),
+  buffminutesScreen = document.getElementById('buffminutes'),
+  buffhoursScreen = document.getElementById('buffhours');
+//buttons
+let addButt = document.getElementById("addtime"),
+  minButt = document.getElementById('mintime')
+  startButt = document.getElementById('start');
+//time RIGHT NOW when user open the app
+var started2 = 0;
+var now = new Date();
+console.log(now)
+var user = {
+  "hoursNow":now.getHours(),
+  "minutesNow":now.getMinutes(),
+  "secondsNow":now.getSeconds()
+}
+console.log(user)
+//check is timer complete
+if (savedUser.planedHours<=now.getHours() && savedUser.planedMinutes<=now.getMinutes()) {
+  started2 = false;
+}
+else {
+  started2 = true;
+}
+console.log(started2)
+//var for started timer
+if (savedUser.started === true && started2 === true) {
+  addButt.disabled = true; minButt.disabled = true; startButt.disabled = true;
+}
+else {
+  addButt.disabled = false; minButt.disabled = false; startButt.disabled = false;
+}
 
-    
 
-    function setTime(n) {
-        mainTime=mainTime+n;
-        settime.innerHTML = mainTime/60;
-        console.log(mainTime);
+//MAIN
+function main() {
+  var now = new Date();
+  console.log(now)
+  var user = {
+    "hoursNow":now.getHours(),
+    "minutesNow":now.getMinutes(),
+    "secondsNow":now.getSeconds()
+  }
+
+  //innerHTML time right now///
+  hoursScreen.innerHTML = now.getHours();
+  minutesScreen.innerHTML = now.getMinutes();
+  function seconds() {
+    if (now.getSeconds() < 10) {
+      buffsecScreen.innerHTML = '0';
+      secondsScreen.innerHTML = now.getSeconds();
     }
-
-    function checkTime() {
-        var date = new Date();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        //console.log(hours, minutes)
-        const savedUser = JSON.parse(localStorage.getItem('timer'))
-        //console.log(savedUser)
-        //return savedUser;
-        if (savedUser.minutes + savedUser.doMinutes >= minutes) {
-            return "not ready!"
-        }
-        else {
-            settime.innerHTML = 'READY!';
-            return "ready!"
-        }
+    else {
+      buffsecScreen.innerHTML = '';
+      secondsScreen.innerHTML = now.getSeconds();
     }
-    console.log(checkTime());
-    console.log(checkTime().minutes);
-
-
-    function startTimer() {
-        var date = new Date();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        console.log(hours, minutes)
-        var SAVETIME = {"hours": hours, "minutes": minutes, "doMinutes": mainTime/60}
-        console.log(SAVETIME)
-        localStorage.setItem('timer', JSON.stringify(SAVETIME));
-
-        settime.innerHTML = "Timer ready! Now get out! "
-        startButt.disabled = true;
-
-        const savedUser = JSON.parse(localStorage.getItem('timer'))
-        console.log(savedUser)
+  }
+  function minutes() {
+    if (now.getMinutes() < 10) {
+      buffminutesScreen.innerHTML = '0';
+      minutesScreen.innerHTML = now.getMinutes();
     }
+    else {
+      buffminutesScreen.innerHTML = '';
+      minutesScreen.innerHTML = now.getMinutes();
+    }
+  }
+  function hours() {
+    if (now.getHours() < 10) {
+      buffhoursScreen.innerHTML = '0';
+      hoursScreen.innerHTML = now.getHours();
+    }
+    else {
+      buffhoursScreen.innerHTML = '';
+      hoursScreen.innerHTML = now.getHours();
+    }
+  }
+  hours(), seconds(), minutes()
+  /////////////////////////////
+
+
+}
+////Timer
+function startTimer(n) {
+  addButt.disabled = true; minButt.disabled = true; startButt.disabled = true; //off all buttons
+  started = true; //started timer
+  var now = new Date(); //Date for saving it in user
+  var planedHours = now.getHours();
+  var planedMinutes = now.getMinutes()+n;
+  var planedSeconds = now.getSeconds();
+  console.log(now)
+
+  if (planedMinutes >= 60) {
+    planedHours = planedHours+1
+    planedMinutes = planedMinutes-60
+  }
+  console.log(planedHours, planedMinutes);
+
+  var user = {
+    "hoursNow":now.getHours(),    //
+    "minutesNow":now.getMinutes(),// time lol
+    "secondsNow":now.getSeconds(),//
+    "started": started,
+    "doTime": n, //time in timer
+    "planedHours": planedHours,
+    "planedMinutes": planedMinutes,
+    "planedSeconds": planedSeconds
+  } //user
+
+  localStorage.setItem('user', JSON.stringify(user)); //save user data to localStorage
+
+
+}
+
+// //RESET FUNCTION FOR DEBUGGING
+// function reset() {
+//   started = false;
+//   var now = new Date();
+//   console.log(now)
+//   var user = {
+//     "hoursNow":now.getHours(),
+//     "minutesNow":now.getMinutes(),
+//     "secondsNow":now.getSeconds(),
+//     "started": started
+//   }
+//   localStorage.setItem('user', JSON.stringify(user));
+// } reset();
+
+//MAIN TIMER
+let timerId = setInterval(() => main(), 1000);
+
 
 </script>
+
+<!-- Telegram LINK: https://t.me/treetimer -->
+ <!-- Telegram LINK: https://t.me/treetimer -->
+  <!-- Telegram LINK: https://t.me/treetimer -->
+   <!-- Telegram LINK: https://t.me/treetimer -->
